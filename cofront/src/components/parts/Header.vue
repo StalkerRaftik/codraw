@@ -3,13 +3,13 @@
     <n-input
       v-if="bp.lg.matches"
       class="search"
-      type="text"
+      type="search"
       size="large"
       placeholder="Поиск аниме"
     />
     <n-modal v-model:show="showSearchModal">
       <n-card class="modal-search">
-        <n-input type="text" size="large" placeholder="Поиск аниме" />
+        <n-input type="search" size="large" placeholder="Поиск аниме" />
       </n-card>
     </n-modal>
 
@@ -22,11 +22,7 @@
     <n-space v-else justify="space-between" align="center">
       <n-space align="center">
         <div class="Navigation">
-          <router-link
-            v-for="path in paths"
-            :to="path.to"
-            :key="path.key"
-          >
+          <router-link v-for="path in paths" :to="path.to" :key="path.key">
             <n-button class="nav-btn" quaternary size="large" tag="a">
               {{ path.label }}
             </n-button>

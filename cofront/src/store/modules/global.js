@@ -7,7 +7,6 @@ export default {
       lightTheme: undefined,
       darkTheme: darkTheme,
     };
-
     return {
       themes,
       theme: localStorage.theme || 'lightTheme',

@@ -1,13 +1,15 @@
 <template>
   <div id="app">
     <n-config-provider :theme="theme">
-      <div class="sctructure">
-        <Header />
-        <n-el class="main-content">
-          <router-view/>
-        </n-el>
-        <Footer v-if="!this.$route?.meta?.hideFooter === true" />
-      </div>
+      <n-notification-provider>
+        <div class="sctructure">
+          <Header />
+          <n-el class="main-content">
+            <router-view />
+          </n-el>
+          <Footer v-if="!this.$route?.meta?.hideFooter === true" />
+        </div>
+      </n-notification-provider>
     </n-config-provider>
   </div>
 </template>
