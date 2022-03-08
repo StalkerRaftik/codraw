@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if ! [ $(id -u) = 0 ]; then
-   echo "Access denied! Run script with an SUDO rights!" >&2
+   echo "Access denied! Run script with a SUDO rights!" >&2
    exit 1
 fi
 
@@ -25,3 +25,12 @@ echo nodejs + npm + yarn was installed
 yarn global add @vue/cli
 vue --version
 echo vue-cli installed
+
+mkdir /etc/codraw
+touch /etc/codraw/settings.ini
+
+echo "
+from django.contrib.auth import get_user_model;
+User = get_user_model();
+User.objects.create_superuser('admin', 'admin@myproject.com', 'admin')
+" | python manage.py shell

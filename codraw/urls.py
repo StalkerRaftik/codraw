@@ -7,20 +7,22 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 
-URLS_PATH = f'{settings.PROJECT_NAME}.urls'
+paths = [
+    path('api/', include(f'{URLS_PATH}.urls'))
+    for URLS_PATH in settings.PROJECT_APPS
+]
 
 schema_view = get_schema_view(
     openapi.Info(
         title="CoDraw API",
         default_version='v1',
     ),
-    patterns=[path('api/', include(URLS_PATH)), ],
+    patterns=[*paths],
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
-
     path('admin/', admin.site.urls),
     path(
         'api/endpoint/',
@@ -35,5 +37,5 @@ urlpatterns = [
         schema_view.without_ui(cache_timeout=0),
         name='schema-json'
     ),
-    path('api/', include(URLS_PATH)),
+    *paths
 ]

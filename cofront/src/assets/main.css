@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+a:link {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
+
+a:visited {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
+
+button {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0);
+  border: rgba(0, 0, 0, 0);
+}
