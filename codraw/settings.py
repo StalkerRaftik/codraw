@@ -35,7 +35,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CORS_ORIGIN_ALLOW_ALL = DEBUG
-CORS_ALLOWED_ORIGINS = []
+# may I can use only http ?
+localhost = 'http://127.0.0.1:8080'
+CORS_ALLOWED_ORIGINS = [localhost, localhost.replace('http', 'https')]
 
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True

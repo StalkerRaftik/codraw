@@ -24,9 +24,6 @@ export default {
     Header,
     Footer,
   },
-  data() {
-    return {};
-  },
   computed: {
     theme() {
       return this.$store.getters.theme;

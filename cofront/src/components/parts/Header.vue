@@ -29,31 +29,24 @@
           </router-link>
         </div>
         <Icon v-if="bp.md.matches" @click="showSearch" size="24">
-          <Search32Filled />
+          <SearchIcon />
         </Icon>
       </n-space>
       <n-space justify="end" align="center">
         <Icon @click="switchTheme" size="24" style="margin-right: 8px">
-          <DarkTheme24Regular />
+          <ChangeThemeIcon />
         </Icon>
-        <div v-if="!logged">
-          <router-link to="/login">
-            <n-button quaternary style="margin-right: 8px"
-              >Войти
-            </n-button></router-link
-          >
-          <router-link to="/registration"
-            ><n-button quaternary>Регистрация </n-button></router-link
-          >
-        </div>
+        <HeaderAuth/>
       </n-space>
     </n-space>
   </n-card>
 </template>
 
 <script>
-import Search32Filled from "@vicons/fluent/Search32Filled";
-import DarkTheme24Regular from "@vicons/fluent/DarkTheme24Regular";
+import {Search32Filled as SearchIcon} from "@vicons/fluent";
+import {DarkTheme24Regular as ChangeThemeIcon} from "@vicons/fluent";
+import HeaderAuth from '@/components/HeaderAuth'
+
 
 import useBreakpoints from "vue-next-breakpoints";
 import MobileMenu from "@/components/MobileMenu";
@@ -70,10 +63,11 @@ export default {
     return { bp };
   },
   components: {
-    Search32Filled,
-    DarkTheme24Regular,
+    SearchIcon,
+    ChangeThemeIcon,
     Icon,
     MobileMenu,
+    HeaderAuth,
   },
   data() {
     return {

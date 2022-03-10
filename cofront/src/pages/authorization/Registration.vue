@@ -13,7 +13,7 @@
 
 <script>
 import RegistrationTemplate from "@/components/PageInputTemplate";
-import {client, setAuthToken} from "@/axios";
+import { client } from "@/axios";
 
 import { useNotification } from "naive-ui";
 
@@ -41,17 +41,17 @@ export default {
         password: {
           placeholder: "Введите пароль",
           label: "Пароль",
-          type: 'password',
+          type: "password",
         },
         passwordRepeat: {
           placeholder: "Повторите пароль",
           label: "Пароль(еще раз)",
-          type: 'password',
+          type: "password",
         },
         email: {
           placeholder: "example@mail.com",
           label: "Почтовый адрес",
-          type: 'email',
+          type: "email",
         },
       },
       rules: {
@@ -96,9 +96,10 @@ export default {
       const postData = { ...data };
       delete postData["passwordRepeat"];
       try {
-        const results = await client.post("/users/signup/", postData);
-        setAuthToken(results.data.token);
-        await this.$router.push('/')
+        const results = await client.post("/user/signup/", postData);
+        this.$store.commit('setAuthToken', results.data.token);
+        await this.$store.dispatch('fetchUserData');
+        await this.$router.push("/");
       } catch (e) {
         this.notification.error({
           title: "Регистрация завершилась неудачно!",

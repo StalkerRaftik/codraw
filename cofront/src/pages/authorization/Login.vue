@@ -12,7 +12,7 @@
 
 <script>
 import RegistrationTemplate from "@/components/PageInputTemplate";
-import {client, setAuthToken} from "@/axios";
+import { client } from "@/axios";
 import { useNotification } from "naive-ui";
 
 export default {
@@ -32,10 +32,12 @@ export default {
         username: {
           placeholder: "Введите логин",
           label: "Логин",
+          type: "text",
         },
         password: {
           placeholder: "Введите пароль",
           label: "Пароль",
+          type: "password",
         },
       },
       rules: {
@@ -58,9 +60,10 @@ export default {
     async login(postData) {
       this.disabled = true;
       try {
-        const results = await client.post("/users/login/", postData);
-        setAuthToken(results.data.token);
-        await this.$router.push('/')
+        const results = await client.post("/user/login/", postData);
+        this.$store.commit("setAuthToken", results.data.token);
+        await this.$store.dispatch("fetchUserData");
+        await this.$router.push("/");
       } catch (e) {
         this.notification.error({
           title: "Неверно указан логин или пароль!",

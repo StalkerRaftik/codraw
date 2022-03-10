@@ -9,7 +9,7 @@ from codraw.utils.createviews import SetMethodsMetaClass
 from codraw.permissions import IsNotAuthenticated
 
 
-def base_user_validator(serializer, data):
+def _user_validator(serializer, data):
     user = serializer.context['request'].user
     if data['password']:
         validate_password(data['password'], user=user)
@@ -18,67 +18,60 @@ def base_user_validator(serializer, data):
     return data
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
+class LoginSerializer(serializers.ModelSerializer):
     token = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'token']
+        fields = ['id', 'username', 'password', 'token']
         extra_kwargs = {
             'username': {'write_only': True},
-            'email': {'write_only': True},
             'password': {'write_only': True},
+            'id': {'read_only': True},
         }
 
-    validate = base_user_validator
 
-
-class AuthSerializer(serializers.ModelSerializer):
-    token = serializers.CharField(read_only=True)
-
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'token']
+class UserCreateSerializer(LoginSerializer):
+    class Meta(LoginSerializer.Meta):
+        fields = LoginSerializer.Meta.fields + ['email']
         extra_kwargs = {
-            'username': {'write_only': True},
+            **LoginSerializer.Meta.extra_kwargs,
             'email': {'write_only': True},
-            'password': {'write_only': True},
         }
 
-    validate = base_user_validator
+    validate = _user_validator
 
 
-class AccountSerializer(serializers.ModelSerializer):
+class UserRUDSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'last_login', 'is_staff', 'password']
-        read_only_fields = ['is_staff', 'last_login']
+        fields = ['id', 'username', 'email', 'last_login', 'is_staff', 'password']
+        read_only_fields = ['id', 'is_staff', 'last_login']
         extra_kwargs = {'password': {'write_only': True}}
 
-    validate = base_user_validator
+    validate = _user_validator
 
 
 class OneUserViewSet(metaclass=SetMethodsMetaClass):
-    methods = ('DETAIL', 'UPDATE', 'DELETE')
+    methods = ('LIST', 'UPDATE', 'DELETE')
     queryset = User.objects.all()
-    serializer_class = AccountSerializer
+    serializer_class = UserRUDSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        return User.objects.filter(id=user.id)
+        return User.objects.filter(id=self.request.user.id)
 
     @action(
         detail=False,
         methods=['post'],
-        serializer_class=RegistrationSerializer,
+        serializer_class=UserCreateSerializer,
         permission_classes=[IsNotAuthenticated],
     )
     def signup(self, request):
         """
-        ## Returns only `token` field.
+        ## Returns only `token` and `id` fields.
         """
-        serializer = RegistrationSerializer(data=request.data, context={'request': request})
+        serializer = UserCreateSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         token = Token.objects.create(user=user).pk
@@ -88,12 +81,12 @@ class OneUserViewSet(metaclass=SetMethodsMetaClass):
     @action(
         detail=False,
         methods=['post'],
-        serializer_class=AuthSerializer,
+        serializer_class=LoginSerializer,
         permission_classes=[IsNotAuthenticated]
     )
     def login(self, request):
         """
-        ## Returns only `token` field.
+        ## Returns only `token` and `id` fields.
         """
         user = User.objects.get(username=request.data['username'])
         if not user.check_password(request.data['password']):

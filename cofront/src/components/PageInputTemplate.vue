@@ -16,6 +16,7 @@
             v-model:value="mutableFormData[key]"
             :type="uiData[key].type"
             :placeholder="uiData[key].placeholder"
+            v-on:keyup.enter="validate"
           />
         </n-form-item>
         <n-space justify="center">

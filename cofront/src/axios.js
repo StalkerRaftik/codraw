@@ -16,11 +16,5 @@ export function newClient(extraSettings) {
     ...clientSettings,
     ...extraSettings,
   });
-}
-
-export function setAuthToken(authToken) {
-  localStorage.authToken = authToken;
-  newClient({
-    headers: { Authorization: `Token ${authToken}` },
-  });
+  return client;
 }

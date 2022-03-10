@@ -1,8 +1,12 @@
 import { createStore } from 'vuex'
-import global from './modules/global'
+import theme from './modules/theme'
+import user from './modules/user'
 
-export const store = createStore({
+const store = createStore({
   modules: {
-    global,
+    theme,
+    user,
   }
 })
+
+export default store;

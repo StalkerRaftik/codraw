@@ -3,7 +3,7 @@ from rest_framework import routers
 from frontapi.api.user import OneUserViewSet
 
 router = routers.DefaultRouter()
-router.register(r'users', OneUserViewSet)
+router.register(r'user', OneUserViewSet)
 
 
 urlpatterns = [

@@ -1,5 +1,4 @@
-import { store } from "../index";
-import { darkTheme } from 'naive-ui'
+import { darkTheme } from "naive-ui";
 
 export default {
   state() {
@@ -9,13 +8,15 @@ export default {
     };
     return {
       themes,
-      theme: localStorage.theme || 'lightTheme',
+      theme: localStorage.theme || "lightTheme",
     };
   },
   mutations: {
     setTheme(state, theme) {
       if (!theme) {
-        theme = Object.keys(state.themes).filter((val) => val !== state.theme)[0];
+        theme = Object.keys(state.themes).filter(
+          (val) => val !== state.theme
+        )[0];
       }
       state.theme = theme;
       localStorage.theme = theme;
@@ -27,8 +28,8 @@ export default {
     },
   },
   actions: {
-    switchTheme({ theme }) {
-      store.commit("setTheme", theme);
+    switchTheme({ commit }, theme = undefined) {
+      commit("setTheme", theme);
     },
   },
 };
