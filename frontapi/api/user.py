@@ -11,9 +11,9 @@ from codraw.permissions import IsNotAuthenticated
 
 def _user_validator(serializer, data):
     user = serializer.context['request'].user
-    if data['password']:
+    if 'password' in data:
         validate_password(data['password'], user=user)
-    if data['email']:
+    if 'email' in data:
         validate_email(data['email'])
     return data
 
@@ -25,8 +25,8 @@ class LoginSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'password', 'token']
         extra_kwargs = {
-            'username': {'write_only': True},
-            'password': {'write_only': True},
+            'username': {'write_only': True, 'required': True},
+            'password': {'write_only': True, 'required': True},
             'id': {'read_only': True},
         }
 
@@ -36,7 +36,7 @@ class UserCreateSerializer(LoginSerializer):
         fields = LoginSerializer.Meta.fields + ['email']
         extra_kwargs = {
             **LoginSerializer.Meta.extra_kwargs,
-            'email': {'write_only': True},
+            'email': {'write_only': True, 'required': True},
         }
 
     validate = _user_validator
@@ -73,7 +73,7 @@ class OneUserViewSet(metaclass=SetMethodsMetaClass):
         """
         serializer = UserCreateSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+        user = User.objects.create_user(**serializer.validated_data);
         token = Token.objects.create(user=user).pk
 
         return Response({'token': token}, status=status.HTTP_201_CREATED)
@@ -88,9 +88,13 @@ class OneUserViewSet(metaclass=SetMethodsMetaClass):
         """
         ## Returns only `token` and `id` fields.
         """
-        user = User.objects.get(username=request.data['username'])
+        resp_400 = Response({'error': 'Incorrect login or password!'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = User.objects.get(username=request.data['username'])
+        except User.DoesNotExist:
+            return resp_400
         if not user.check_password(request.data['password']):
-            return Response({'error': 'Incorrect password!'}, status=status.HTTP_400_BAD_REQUEST)
+            return resp_400
 
         token = Token.objects.get_or_create(user=user)[0].pk
         return Response({'token': token}, status=status.HTTP_201_CREATED)

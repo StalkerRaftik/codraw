@@ -1,15 +1,15 @@
-import {client, newClient} from "@/axios";
+import { client, newClient } from "@/axios";
 
 export default {
   state() {
     return {
-      authToken: localStorage.authToken || '',
+      authToken: localStorage.authToken || "",
       user: undefined,
     };
   },
   getters: {
     user(state) {
-      return state.user
+      return state.user;
     },
   },
   mutations: {
@@ -25,13 +25,17 @@ export default {
     },
   },
   actions: {
+    logout({ state, commit }) {
+      commit("setAuthToken", "");
+      state.user = undefined;
+    },
     async fetchUserData({ state, commit }) {
       if (!state.authToken) return;
       try {
         const results = await client.get("/user/");
         commit("saveUser", results.data[0]);
       } catch {
-        commit('setAuthToken', '');
+        commit("setAuthToken", "");
       }
     },
   },

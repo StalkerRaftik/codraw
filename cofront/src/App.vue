@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <n-config-provider :theme="theme">
+    <n-config-provider :theme="theme" :local="ruRU" :date-locale="dateRuRU">
       <n-notification-provider>
         <div class="sctructure">
           <Header />
@@ -17,12 +17,19 @@
 <script>
 import Header from "@/components/parts/Header";
 import Footer from "@/components/parts/Footer";
+import { ruRU, dateRuRU } from "naive-ui";
 
 export default {
   name: "header",
   components: {
     Header,
     Footer,
+  },
+  data() {
+    return {
+      ruRU,
+      dateRuRU,
+    }
   },
   computed: {
     theme() {

@@ -1,18 +1,43 @@
 <template>
   <div>
-    <n-dropdown v-if="user" :options="options">
-      <n-button text type="primary" size="large">{{ user.username }}</n-button>
-    </n-dropdown>
-    <div v-else>
-      <router-link to="/login">
-        <n-button quaternary style="margin-right: 8px"
-          >Войти
-        </n-button></router-link
-      >
-      <router-link to="/registration"
-        ><n-button quaternary>Регистрация </n-button></router-link
-      >
+    <div v-if="!bp.xs.matches">
+      <n-dropdown v-if="user" :options="options">
+        <n-button text type="primary" size="large">{{
+          user.username
+        }}</n-button>
+      </n-dropdown>
+      <div v-else>
+        <n-button
+          v-for="option in options"
+          :key="option.key"
+          quaternary
+          style="margin-right: 8px"
+          @click="option.props.onClick"
+          >{{ option.label }}
+        </n-button>
+      </div>
     </div>
+    <n-space v-else vertical>
+      <n-divider
+        title-placement="left"
+        style="margin-top: 18px; margin-bottom: 18px"
+      >
+        {{ user ? user.username : "Авторизация" }}
+      </n-divider>
+      <n-button
+        v-for="option in options"
+        :key="option.key"
+        class="burger-buttons"
+        quaternary
+        size="large"
+        type="info"
+        href="#"
+        tag="a"
+        @click.prevent="option.props.onClick"
+      >
+        {{ option.label }}
+      </n-button>
+    </n-space>
   </div>
 </template>
 
@@ -23,9 +48,15 @@ import {
   PersonCircleOutline as UserIcon,
   LogOutOutline as LogoutIcon,
 } from "@vicons/ionicons5";
+import useBreakpoints from "vue-next-breakpoints";
 
 const renderIcon = (icon) => {
   return () => {
+    console.log(
+      h(NIcon, null, {
+        default: () => h(icon),
+      })
+    );
     return h(NIcon, null, {
       default: () => h(icon),
     });
@@ -34,17 +65,24 @@ const renderIcon = (icon) => {
 
 export default {
   name: "HeaderAuth",
+  setup() {
+    const bp = useBreakpoints({
+      xs: 550,
+      md: 1200,
+      lg: [1201],
+    });
+    return { bp };
+  },
   data() {
     return {
-      options: [
+      optionsLogged: [
         {
           label: "Профиль",
           key: "profile",
           icon: renderIcon(UserIcon),
           props: {
             onClick: () => {
-              // TODO
-              // ALSO TODO MOBILE PROFILE LOGO
+              this.$router.push("/me");
             },
           },
         },
@@ -54,8 +92,28 @@ export default {
           icon: renderIcon(LogoutIcon),
           props: {
             onClick: () => {
-              this.$store.commit("setAuthToken", "");
-              this.$router.go(this.$router.currentRoute);
+              this.$store.dispatch("logout");
+              this.$router.push("/");
+            },
+          },
+        },
+      ],
+      optionsNotLogged: [
+        {
+          label: "Войти",
+          key: "login",
+          props: {
+            onClick: () => {
+              this.$router.push("/login");
+            },
+          },
+        },
+        {
+          label: "Регистрация",
+          key: "registration",
+          props: {
+            onClick: () => {
+              this.$router.push("/registration");
             },
           },
         },
@@ -65,6 +123,9 @@ export default {
   computed: {
     user() {
       return this.$store.getters.user;
+    },
+    options() {
+      return this.user ? this.optionsLogged : this.optionsNotLogged;
     },
   },
 };

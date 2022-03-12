@@ -36,17 +36,16 @@
         <Icon @click="switchTheme" size="24" style="margin-right: 8px">
           <ChangeThemeIcon />
         </Icon>
-        <HeaderAuth/>
+        <HeaderAuth style="margin-right: 8px" />
       </n-space>
     </n-space>
   </n-card>
 </template>
 
 <script>
-import {Search32Filled as SearchIcon} from "@vicons/fluent";
-import {DarkTheme24Regular as ChangeThemeIcon} from "@vicons/fluent";
-import HeaderAuth from '@/components/HeaderAuth'
-
+import { Search32Filled as SearchIcon } from "@vicons/fluent";
+import { DarkTheme24Regular as ChangeThemeIcon } from "@vicons/fluent";
+import HeaderAuth from "@/components/HeaderAuth";
 
 import useBreakpoints from "vue-next-breakpoints";
 import MobileMenu from "@/components/MobileMenu";
@@ -109,7 +108,8 @@ export default {
 <style scoped>
 .header {
   border-radius: 0;
-  border-bottom-width: 0px;
+  border-bottom-width: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 .Navigation {

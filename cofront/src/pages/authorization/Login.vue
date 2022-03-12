@@ -1,5 +1,5 @@
 <template>
-  <RegistrationTemplate
+  <PageInputTemplate
     title="Вход в аккаунт"
     button-title="Войти"
     :form-data="formData"
@@ -11,14 +11,15 @@
 </template>
 
 <script>
-import RegistrationTemplate from "@/components/PageInputTemplate";
+import PageInputTemplate from "@/components/PageInputTemplate";
 import { client } from "@/axios";
 import { useNotification } from "naive-ui";
+import { parseResponseException } from "@/utils";
 
 export default {
   name: "Login",
   components: {
-    RegistrationTemplate,
+    PageInputTemplate,
   },
   data() {
     return {
@@ -66,7 +67,8 @@ export default {
         await this.$router.push("/");
       } catch (e) {
         this.notification.error({
-          title: "Неверно указан логин или пароль!",
+          title: "Ошибка!",
+          content: parseResponseException(e),
           duration: 3000,
         });
       }

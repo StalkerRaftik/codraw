@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Home from "@/pages/home/Home";
 import Login from "@/pages/authorization/Login";
 import Registration from "@/pages/authorization/Registration";
+import Profile from "@/pages/Profile";
 
 const routes = [
   {
@@ -21,6 +22,14 @@ const routes = [
     path: "/registration",
     name: "Register",
     component: Registration,
+    meta: {
+      hideFooter: true,
+    },
+  },
+    {
+    path: "/me",
+    name: "Profile",
+    component: Profile,
     meta: {
       hideFooter: true,
     },

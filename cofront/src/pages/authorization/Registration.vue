@@ -1,5 +1,5 @@
 <template>
-  <RegistrationTemplate
+  <PageInputTemplate
     ref="templateRef"
     title="Создать новый аккаунт"
     button-title="Зарегистрироваться"
@@ -12,15 +12,16 @@
 </template>
 
 <script>
-import RegistrationTemplate from "@/components/PageInputTemplate";
+import PageInputTemplate from "@/components/PageInputTemplate";
 import { client } from "@/axios";
-
+import $t from "@/i18n";
+import { parseResponseException } from "@/utils";
 import { useNotification } from "naive-ui";
 
 export default {
   name: "Registration",
   components: {
-    RegistrationTemplate,
+    PageInputTemplate,
   },
   data() {
     return {
@@ -91,23 +92,25 @@ export default {
     };
   },
   methods: {
+    $t,
     async register(data) {
       this.disabled = true;
       const postData = { ...data };
       delete postData["passwordRepeat"];
       try {
         const results = await client.post("/user/signup/", postData);
-        this.$store.commit('setAuthToken', results.data.token);
-        await this.$store.dispatch('fetchUserData');
+        this.$store.commit("setAuthToken", results.data.token);
+        await this.$store.dispatch("fetchUserData");
         await this.$router.push("/");
       } catch (e) {
         this.notification.error({
           title: "Регистрация завершилась неудачно!",
-          content: JSON.stringify(e.response),
-          duration: 3000,
+          content: parseResponseException(e),
+          duration: 10 * 1000,
         });
+      } finally {
+        this.disabled = false;
       }
-      this.disabled = false;
     },
   },
 };
