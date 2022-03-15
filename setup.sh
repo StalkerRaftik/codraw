@@ -5,6 +5,11 @@ if ! [ $(id -u) = 0 ]; then
    exit 1
 fi
 
+echo -e "\e[46mProject requires Python 3.9 or greater!\n\
+Be sure you have suitable version!\e[0m
+"
+sleep 5
+
 apt update
 
 mkdir centrifugo

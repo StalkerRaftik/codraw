@@ -3,12 +3,18 @@ import Home from "@/pages/home/Home";
 import Login from "@/pages/authorization/Login";
 import Registration from "@/pages/authorization/Registration";
 import Profile from "@/pages/Profile";
+import AnimeList from "@/pages/anime/AnimeList";
 
 const routes = [
   {
     path: "",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/anime",
+    name: "Anime List",
+    component: AnimeList,
   },
   {
     path: "/login",
@@ -26,7 +32,7 @@ const routes = [
       hideFooter: true,
     },
   },
-    {
+  {
     path: "/me",
     name: "Profile",
     component: Profile,

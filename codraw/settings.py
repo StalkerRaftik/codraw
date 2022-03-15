@@ -55,7 +55,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'codraw',
-] + list(map(lambda proj: f'{proj}.apps.{proj.capitalize()}Config', PROJECT_APPS))
+] + list(map(
+    lambda proj: f'{proj}.apps.{proj.capitalize()}Config',
+    PROJECT_APPS
+))
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -73,8 +76,7 @@ ROOT_URLCONF = 'codraw.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,13 +150,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # REST Framework
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 12,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
 }

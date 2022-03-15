@@ -73,7 +73,7 @@ class OneUserViewSet(metaclass=SetMethodsMetaClass):
         """
         serializer = UserCreateSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        user = User.objects.create_user(**serializer.validated_data);
+        user = User.objects.create_user(**serializer.validated_data)
         token = Token.objects.create(user=user).pk
 
         return Response({'token': token}, status=status.HTTP_201_CREATED)

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from codraw.models import Genre
-from codraw.utils.createviews import SetMethodsMetaClass, DependSerializerMixin
+from codraw.utils.createviews import SetMethodsMetaClass, DependSerializerViewMixin
 from codraw.permissions import IsStaffOrReadOnly
 
 
@@ -17,7 +17,7 @@ class GenreRetrieveSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class GenreViewSet(DependSerializerMixin, metaclass=SetMethodsMetaClass):
+class GenreViewSet(DependSerializerViewMixin, metaclass=SetMethodsMetaClass):
     queryset = Genre.objects.all()
     read_serializer_class = GenreSerializer
     write_serializer_class = GenreSerializer

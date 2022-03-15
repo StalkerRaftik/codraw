@@ -29,7 +29,7 @@ class SetMethodsMetaClass(type):
         )
 
 
-class DependSerializerMixin(object):
+class DependSerializerViewMixin(object):
     """
     Overrides get_serializer_class to choose the read serializer
     for GET requests and the write serializer for POST requests.
@@ -56,15 +56,6 @@ class DependSerializerMixin(object):
             % self.__class__.__name__
         )
         return self.read_serializer_class
-
-    def get_detail_serializer_class(self):
-        assert self.read_serializer_class is not None or self.detail_serializer_class is not None, (
-            "'%s' should either include a `detail_serializer_class` attribute,"
-            "or include `read_serializer_class` as default for `detail_serializer_class`"
-            "or override the `get_detail_serializer_class()` method."
-            % self.__class__.__name__
-        )
-        return getattr(self, 'detail_serializer_class', self.read_serializer_class)
 
     def get_write_serializer_class(self):
         assert self.write_serializer_class is not None, (

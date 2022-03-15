@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from codraw.models.anime import Rating
-from codraw.utils.createviews import SetMethodsMetaClass, DependSerializerMixin
+from codraw.utils.createviews import SetMethodsMetaClass, DependSerializerViewMixin
 from codraw.permissions import IsOwnerOrReadOnly
 
 
@@ -17,7 +17,7 @@ class UpdateRatingSerializer(serializers.ModelSerializer):
         fields = ('value',)
 
 
-class RatingViewSet(DependSerializerMixin, metaclass=SetMethodsMetaClass):
+class RatingViewSet(DependSerializerViewMixin, metaclass=SetMethodsMetaClass):
     methods = ('CREATE', 'DETAIL', 'UPDATE')
     queryset = Rating.objects.all()
     read_serializer_class = ReadCreateRatingSerializer

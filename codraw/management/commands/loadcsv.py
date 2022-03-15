@@ -1,13 +1,18 @@
-from django.core.management.base import BaseCommand, CommandError
-from codraw.models.anime import Anime, AnimeStatus, Genre
 import csv
-from datetime import datetime
-import traceback
 import logging
+import traceback
+from datetime import datetime
+
 import requests
-from django.core.files.base import ContentFile, File
+from django.core.files.base import File
+from django.core.management.base import BaseCommand
 from django.db import transaction
-import os
+
+from codraw.models.anime import Anime, AnimeStatus, Genre
+
+# .csv header:
+# ['uid', 'title', 'synopsis', 'genre', 'aired', 'episodes',
+# 'members', 'popularity', 'ranked', 'score', 'img_url', 'link']
 
 
 class Command(BaseCommand):
@@ -20,8 +25,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for path in options['filenames']:
             with open(path, newline='') as csvfile:
-                # ['uid', 'title', 'synopsis', 'genre', 'aired',
-                # 'episodes', 'members', 'popularity', 'ranked', 'score', 'img_url', 'link']
                 spamreader = csv.reader(csvfile)
                 next(spamreader, None)  # skip header
                 for row in spamreader:

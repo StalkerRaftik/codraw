@@ -27,7 +27,7 @@ urlpatterns = [
     path(
         'api/endpoint/',
         TemplateView.as_view(
-            template_name=f'swaggerui/swaggerui.html',
+            template_name='swaggerui/swaggerui.html',
             extra_context={'schema_url': 'openapi-schema'}
         ),
         name='swagger-ui'
