@@ -5,8 +5,10 @@ Sweety pet project :3
 2. Activate venv using command `source path-to-venv-folder/bin/activate`;
 3. Go to root project folder;
 4. Run `./setup.sh` command with `sudo` rights;
-5. Go to `cofront` folder;
-6. Run `yarn` command.
+5. Make migrations using `python manage.py makemigrations codraw`
+6. Migrate using  `python manage.py migrate`
+7. Go to `cofront` folder;
+8. Run `yarn` command.
 #### It's done!
 
 ## Commands:
