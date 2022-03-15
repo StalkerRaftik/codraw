@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'codraw',
 ] + list(map(lambda proj: f'{proj}.apps.{proj.capitalize()}Config', PROJECT_APPS))
 
 MIDDLEWARE = [

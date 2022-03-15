@@ -50,6 +50,8 @@ import {
 } from "@vicons/ionicons5";
 import useBreakpoints from "vue-next-breakpoints";
 
+// TODO: Profile deletion
+
 const renderIcon = (icon) => {
   return () => {
     console.log(
