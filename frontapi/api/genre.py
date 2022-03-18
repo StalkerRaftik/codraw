@@ -8,7 +8,7 @@ from codraw.permissions import IsStaffOrReadOnly
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = ('name',)
+        fields = ('id', 'name')
 
 
 class GenreRetrieveSerializer(serializers.ModelSerializer):
@@ -23,3 +23,4 @@ class GenreViewSet(DependSerializerViewMixin, metaclass=SetMethodsMetaClass):
     write_serializer_class = GenreSerializer
     retrieve_serializer_class = GenreRetrieveSerializer
     permission_classes = [IsStaffOrReadOnly]
+    pagination_class = None

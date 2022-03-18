@@ -7,7 +7,7 @@ function isIterableObject(value) {
 export function parseResponseException(e) {
   let respContent = "";
   if (!e.response) {
-    return 'Соединение с сервером потеряно, попробуйте еще раз.';
+    return 'Соединение с сервером было прервано, попробуйте перезагрузить страницу.';
   }
   if (e.response.status >= 500) {
     return `Случилась ошибка на сервере. Сообщите об этой проблеме администратору.\nСтатус ошибки: ${e.response.status}`;

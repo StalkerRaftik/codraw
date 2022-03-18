@@ -49,5 +49,8 @@ export default {
 .main-content {
   color: var(--text-color-base);
   background-color: var(--body-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

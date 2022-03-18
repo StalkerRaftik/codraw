@@ -35,7 +35,7 @@ class Anime(models.Model):
 
     # temporary rating from dataset. Will be overwritten after ?? reviews
     raw_rating = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(10)], blank=True)
-    # temporary visits from dataset. Will be overwritten after ?? site visits
+    # temporary visits from dataset. Will be overwritten after ?? detail page visits
     raw_visits = models.PositiveBigIntegerField(blank=True)
 
     class Meta:

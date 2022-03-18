@@ -83,7 +83,7 @@ export default {
           key: "anime_list",
           label: "Аниме",
           selected: false,
-          to: "/anime ",
+          to: "/anime",
         },
         {
           key: "forum",

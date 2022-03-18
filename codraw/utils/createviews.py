@@ -11,9 +11,14 @@ mixins = {
 
 
 class SetMethodsMetaClass(type):
-    def __new__(mcs, name, bases, attrs):
+    """
+    Base ViewSet metaclass.
+    Provides actions mixins via `methods` list attribute.
+    ex.: methods = ('LIST', 'CREATE', 'DELETE')
+    """
+    @staticmethod
+    def get_additional_bases(attrs):
         methods = attrs.get('methods', mixins.keys())
-
         additional_bases = []
         for method in methods:
             if method not in mixins:
@@ -21,10 +26,16 @@ class SetMethodsMetaClass(type):
             additional_bases.append(mixins[method])
         additional_bases.append(GenericViewSet)
 
+        return additional_bases
+
+    def __new__(mcs, name, bases, attrs):
         return super().__new__(
             mcs,
             name,
-            (*bases, *additional_bases),
+            (
+                *bases,
+                *mcs.get_additional_bases(attrs)
+            ),
             attrs,
         )
 

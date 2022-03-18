@@ -84,9 +84,11 @@ class Command(BaseCommand):
     @staticmethod
     def get_img(url):
         response = requests.get(url, stream=True)
-        if response.status_code == 200:
-            path = f'images/anime/{url.split("/")[-1]}'
-            with open(path, 'wb') as f:
-                for chunk in response.iter_content(1024):
-                    f.write(chunk)
-            return path
+        if response.status_code != 200:
+            return
+
+        path = f'images/anime/{url.split("/")[-1]}'
+        with open(path, 'wb') as f:
+            for chunk in response.iter_content(1024):
+                f.write(chunk)
+        return path

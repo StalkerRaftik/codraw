@@ -13,7 +13,7 @@ const routes = [
   },
   {
     path: "/anime",
-    name: "Anime List",
+    name: "AnimeList",
     component: AnimeList,
   },
   {
