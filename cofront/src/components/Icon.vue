@@ -1,7 +1,7 @@
 <template>
   <n-icon
     class="icon"
-    :style="{ cursor: clickable ? 'pointer' : 'default' }"
+    :style="{ cursor: clickable ? 'pointer' : 'inherit' }"
     :size="size"
   >
     <slot></slot>

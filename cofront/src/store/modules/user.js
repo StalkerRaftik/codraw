@@ -33,7 +33,7 @@ export default {
       if (!state.authToken) return;
       try {
         const results = await client.get("/user/");
-        commit("saveUser", results.data[0]);
+        commit("saveUser", results.data.results[0]);
       } catch {
         commit("setAuthToken", "");
       }

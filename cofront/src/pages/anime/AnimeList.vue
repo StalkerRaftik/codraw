@@ -23,10 +23,18 @@
 
 <script>
 import { client } from "@/axios";
-import { parseResponseException } from "@/utils";
+import { showError } from "@/utils";
 import AnimeListCard from "@/components/AnimeListCard";
 import useBreakpoints from "vue-next-breakpoints";
 import { useNotification } from "naive-ui";
+
+function saveGenres(store, response) {
+  const genres = {};
+  for (const genreObj of response.data) {
+    genres[genreObj.id] = genreObj.name;
+  }
+  store.state.cache.genres = genres;
+}
 
 export default {
   name: "AnimeList",
@@ -43,66 +51,40 @@ export default {
   },
   data() {
     return {
-      notification: useNotification(),
+      n: useNotification(),
       page: parseInt(this.$route.query.page) || 1,
       animes: [],
       animeCount: 0,
       animePerPage: 12,
     };
   },
-  async mounted() { // TODO: REFACTOR THIS SCARY COMPONENT!!!!!
+  async mounted() {
     try {
-      const responses = [
-        client.get("/anime/", {
-          params: this.$route.query,
-        }),
-      ];
-      if (!this.$store.state.cache.genres) {
-        responses.push(client.get("/genre/"));
-      }
+      const responses = [this.getAnimePromise()];
+      if (!this.genres) responses.push(client.get("/genre/"));
+
       const [animeResponse, genreResponse] = await Promise.all(responses);
 
-      if (genreResponse) {
-        const genres = {};
-        for (const genreObj of genreResponse.data) {
-          genres[genreObj.id] = genreObj.name;
-        }
-        this.$store.state.cache.genres = genres;
-      }
+      if (genreResponse) saveGenres(this.$store, genreResponse);
       this.animes = animeResponse.data.results;
       this.animeCount = animeResponse.data.count;
-      this.animePerPage = this.animes.length;
     } catch (e) {
-      this.notification.error({
-        title: "Данные не были получены!",
-        content: parseResponseException(e),
-        duration: 10000,
-      });
+      showError(this.n, "Данные не были получены!", e);
+    }
+  },
+  async updated() {
+    this.animes = [];
+    this.page = parseInt(this.$route.query.page);
+    window.scrollTo(0, 0);
+    try {
+      this.animes = (await this.getAnimePromise()).data.results;
+    } catch (e) {
+      showError(this.n, "Данные не были получены!", e);
     }
   },
   watch: {
-    async page(newPage) {
-      this.animes = [];
-      const query = { page: newPage };
-      let queryList = [];
-      for (const entry of Object.entries(query)) {
-        queryList.push(`${entry[0]}=${entry[1]}`);
-      }
-      history.pushState({}, null, this.$route.path + `?${queryList.join("&")}`);
-      window.scrollTo(0,0);
-      this.$route.query = query;
-      try {
-        const response = await client.get("/anime/", {
-          params: this.$route.query,
-        });
-        this.animes = response.data.results;
-      } catch (e) {
-        this.notification.error({
-          title: "Данные не были получены!",
-          content: parseResponseException(e),
-          duration: 10000,
-        });
-      }
+    page(newPage) {
+      this.$router.push({ path: this.$route.path, query: { page: newPage } });
     },
   },
   computed: {
@@ -110,7 +92,18 @@ export default {
       return this.$store.state.cache.genres;
     },
     cardsKeysArray() {
-      return [...Array(this.animePerPage).keys()];
+      return [
+        ...Array(
+          this.animes.length > 0 ? this.animes.length : this.animePerPage
+        ).keys(),
+      ];
+    },
+  },
+  methods: {
+    getAnimePromise() {
+      return client.get("/anime/", {
+        params: this.$route.query,
+      });
     },
   },
 };

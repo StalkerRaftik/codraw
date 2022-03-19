@@ -8,7 +8,7 @@ from codraw.permissions import IsStaffOrReadOnly
 class ListAnimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anime
-        fields = ('id', 'name', 'original_name', 'premiere_date', 'image', 'genres')
+        fields = ('id', 'name', 'original_name', 'premiere_date', 'image', 'genres', 'raw_rating', 'raw_visits')
 
 
 class DetailAnimeSerializer(serializers.ModelSerializer):

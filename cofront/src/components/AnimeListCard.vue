@@ -1,27 +1,63 @@
 <template>
   <n-card size="medium" :style="cardStyle" content-style="padding: 0">
     <n-skeleton v-if="!anime" class="image" />
-    <img v-else :src="anime?.image" class="image" />
-    <n-space vertical justify="end" class="card-footer" :size="[0, 0]">
-      <div v-if="anime">
+    <router-link
+      v-else
+      :to="{ name: 'AnimeDetail', params: { id: this.anime.id } }"
+      style="cursor: pointer"
+    >
+      <img :src="anime?.image" class="image" />
+      <n-space
+        v-if="anime"
+        vertical
+        justify="end"
+        class="card-footer"
+        :size="[0, 0]"
+      >
         <div class="gradient" style="height: 40px" />
         <n-space vertical :size="[0, 0]" class="card-data">
-          <n-text style="margin-bottom: 0; font-size: 18px; color: white">{{
-            year
-          }}</n-text>
-          <n-text style="font-size: 18px; color: #63e2b7">{{ name }}</n-text>
+          <n-text style="margin-bottom: 0; font-size: 16px; color: white">
+            {{ year }}
+          </n-text>
+          <n-text class="title">{{ name }}</n-text>
           <n-text style="color: white">{{ getGenres(anime.genres) }}</n-text>
+          <n-space :size="[0, 0]" style="color: white">
+            <div class="stats">
+              <Icon size="14">
+                <RatingIcon />
+              </Icon>
+              <n-text style="text-align: center">
+                {{ anime.raw_rating }}
+              </n-text>
+            </div>
+            <div class="stats">
+              <Icon size="14">
+                <VisitsIcon />
+              </Icon>
+              <n-text>
+                {{ anime.raw_visits }}
+              </n-text>
+            </div>
+          </n-space>
         </n-space>
-      </div>
-    </n-space>
+      </n-space>
+    </router-link>
   </n-card>
 </template>
 
 <script>
 import useBreakpoints from "vue-next-breakpoints";
+import { MdStar as RatingIcon } from "@vicons/ionicons4";
+import { Eye16Filled as VisitsIcon } from "@vicons/fluent";
+import Icon from "@/components/Icon";
 
 export default {
   name: "AnimeListCard",
+  components: {
+    RatingIcon,
+    VisitsIcon,
+    Icon,
+  },
   props: {
     anime: { type: Object, default: undefined },
   },
@@ -99,6 +135,21 @@ export default {
   background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(2px);
   font-weight: bold;
-  padding: 8px;
+  padding: 0 8px 0 8px;
+}
+.title {
+  font-size: 18px;
+  color: #63e2b7;
+}
+.stats {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+span {
+  color: white;
+}
+svg {
+  margin-right: 4px;
 }
 </style>

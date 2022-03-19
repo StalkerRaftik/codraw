@@ -4,6 +4,7 @@ import Login from "@/pages/authorization/Login";
 import Registration from "@/pages/authorization/Registration";
 import Profile from "@/pages/Profile";
 import AnimeList from "@/pages/anime/AnimeList";
+import AnimeDetail from "@/pages/anime/AnimeDetail";
 
 const routes = [
   {
@@ -15,6 +16,11 @@ const routes = [
     path: "/anime",
     name: "AnimeList",
     component: AnimeList,
+  },
+  {
+    path: "/anime/:id",
+    name: "AnimeDetail",
+    component: AnimeDetail,
   },
   {
     path: "/login",
