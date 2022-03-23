@@ -9,7 +9,7 @@ flake8==4.0.1
 tox==3.24.5
 django-storages==1.12.3
 
-psycopg2-binary==2.9.3 # i know binaries are a little evil in production :(
+psycopg2-binary==2.9.3 # i know binaries reduce productivity in production :(
 gunicorn==20.1.0
 mysqlclient==2.1.0
 
