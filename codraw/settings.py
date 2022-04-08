@@ -96,14 +96,15 @@ DATABASES = {
     },
     'postgres': {
         **{option[0].upper(): option[1] for option in config['POSTGRES'].items()},
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'default-character-set': 'utf8',
         'OPTIONS': {
             'sql_mode': 'traditional',
         }
     }
 }
-DATABASES['default'] = DATABASES['sqlite'] if DEBUG else DATABASES['postgres']
+DEFAULT_DB = 'sqlite' if DEBUG else 'postgres'
+DATABASES['default'] = DATABASES.pop(DEFAULT_DB)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
