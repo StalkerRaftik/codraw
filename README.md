@@ -16,11 +16,10 @@ Sweety pet project :3
 3. Go to root project folder;
 4. Run `./setup.sh` command with `sudo` rights;
 5. Run `pip install -U -r requirements.txt`
-6. Make migrations using `python manage.py makemigrations codraw`
-7. Migrate using  `python manage.py migrate`
-8. Go to `cofront` folder;
-9. Run `yarn` command.
-10. Run `sudo yarn global add @vue/cli`
+6. Migrate using  `python manage.py migrate`
+7. Go to `cofront` folder;
+8. Run `yarn` command.
+9. Run `sudo yarn global add @vue/cli`
 #### It's done!
 
 ## Commands:

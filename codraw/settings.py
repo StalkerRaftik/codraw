@@ -1,4 +1,5 @@
 import os
+import logging
 from pathlib import Path
 import configparser
 from distutils.util import strtobool
@@ -30,8 +31,7 @@ ALLOWED_HOSTS = ['*']
 
 CORS_ORIGIN_ALLOW_ALL = DEBUG
 # may I can use only http ?
-localhost = 'http://127.0.0.1:8080'
-CORS_ALLOWED_ORIGINS = [localhost, localhost.replace('http', 'https')]
+CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:8080', 'http://localhost:8080']
 
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True
@@ -93,14 +93,14 @@ DATABASES = {
     'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'OPTIONS': {
+            'timeout': 20,
+        }
     },
     'postgres': {
         **{option[0].upper(): option[1] for option in config['POSTGRES'].items()},
         'ENGINE': 'django.db.backends.postgresql',
         'default-character-set': 'utf8',
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
     }
 }
 DEFAULT_DB = 'sqlite' if DEBUG else 'postgres'
@@ -148,9 +148,9 @@ STATIC_URL = '/static/'
 #     BASE_DIR / "some....",
 # ]
 
-# Media filtes
-
-MEDIA_URL = '/images/'
+# Media filters
+MEDIA_ROOT = BASE_DIR
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

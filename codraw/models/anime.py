@@ -20,7 +20,7 @@ class AnimeStatus(models.TextChoices):
 
 class Anime(models.Model):
     name = models.CharField(max_length=60, blank=True)
-    original_name = models.CharField(max_length=60)
+    original_name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     premiere_date = models.DateField(blank=True)
     status = models.CharField(
@@ -30,7 +30,7 @@ class Anime(models.Model):
     )
     episodes_count = models.IntegerField(default=-1)  # negative means unknown count
     added_episodes = models.IntegerField(default=0)
-    image = models.ImageField('images/anime')
+    image = models.ImageField('media/anime/images')
     genres = models.ManyToManyField(Genre, related_name='anime')
 
     # temporary rating from dataset. Will be overwritten after ?? reviews

@@ -1,5 +1,5 @@
-from django.db import migrations, models
-from django.contrib.auth import get_user_model
+from django.conf import settings
+from django.db import migrations
 
 
 def create_superuser(apps, schema_editor):
@@ -12,8 +12,10 @@ def create_superuser(apps, schema_editor):
 
 class Migration(migrations.Migration):
 
+    initial = True
+
     dependencies = [
-        ('codraw', '0003_alter_anime_image'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
