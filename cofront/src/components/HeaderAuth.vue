@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!bp.xs.matches">
+    <div v-if="bp.md.matches">
       <n-dropdown v-if="user" :options="options">
         <n-button text type="primary" size="large">{{
           user.username
@@ -48,7 +48,7 @@ import {
   PersonCircleOutline as UserIcon,
   LogOutOutline as LogoutIcon,
 } from "@vicons/ionicons5";
-import useBreakpoints from "vue-next-breakpoints";
+import bp from "@/breakpoints"
 
 // TODO: Profile deletion
 
@@ -67,16 +67,9 @@ const renderIcon = (icon) => {
 
 export default {
   name: "HeaderAuth",
-  setup() {
-    const bp = useBreakpoints({
-      xs: 550,
-      md: 1200,
-      lg: [1201],
-    });
-    return { bp };
-  },
   data() {
     return {
+      bp,
       optionsLogged: [
         {
           label: "Профиль",

@@ -1,56 +1,42 @@
 <template>
   <n-space vertical>
     <n-space
-      :style="bp.xs.matches ? { width: '95vw' } : { width: '80vw' }"
-      style="margin-top: 16px; margin-bottom: 16px"
-      justify="space-around"
+        :style="bp.xs.matches ? { width: '80vw' } : { width: '95vw' }"
+        style="margin-top: 16px; margin-bottom: 16px"
+        justify="space-around"
     >
       <AnimeListCard
-        v-for="(animeKey, iterKey) in cardsKeysArray"
-        :key="iterKey"
-        :anime="animes[animeKey]"
+          v-for="(animeKey, iterKey) in cardsKeysArray"
+          style="width: 300px; height: 500px;"
+          :key="iterKey"
+          :anime="animes[animeKey]"
       />
     </n-space>
     <n-space justify="center" style="margin-bottom: 24px">
       <n-pagination
-        v-model:page="page"
-        :page-count="Math.ceil(animeCount / animePerPage)"
-        :page-slot="this.bp.xs.matches ? 5 : 9"
+          v-model:page="page"
+          :page-count="Math.ceil(animeCount / animePerPage)"
+          :page-slot="this.bp.xs.matches ? 9 : 5"
       />
     </n-space>
   </n-space>
 </template>
 
 <script>
-import { client } from "@/axios";
-import { showError } from "@/utils";
+import {client} from "@/axios";
+import {showError} from "@/utils";
 import AnimeListCard from "@/components/AnimeListCard";
-import useBreakpoints from "vue-next-breakpoints";
-import { useNotification } from "naive-ui";
-
-function saveGenres(store, response) {
-  const genres = {};
-  for (const genreObj of response.data) {
-    genres[genreObj.id] = genreObj.name;
-  }
-  store.state.cache.genres = genres;
-}
+import bp from "@/breakpoints"
+import {useNotification} from "naive-ui";
 
 export default {
   name: "AnimeList",
   components: {
     AnimeListCard,
   },
-  setup() {
-    const bp = useBreakpoints({
-      xs: 550,
-      md: 1200,
-      lg: [1201],
-    });
-    return { bp };
-  },
   data() {
     return {
+      bp,
       n: useNotification(),
       page: parseInt(this.$route.query.page) || 1,
       animes: [],
@@ -61,11 +47,8 @@ export default {
   async mounted() {
     try {
       const responses = [this.getAnimePromise()];
-      if (!this.genres) responses.push(client.get("/genre/"));
-
-      const [animeResponse, genreResponse] = await Promise.all(responses);
-
-      if (genreResponse) saveGenres(this.$store, genreResponse);
+      if (!this.genres) responses.push(this.$store.dispatch('fetchGenres'));
+      const animeResponse = (await Promise.all(responses))[0];
       this.animes = animeResponse.data.results;
       this.animeCount = animeResponse.data.count;
     } catch (e) {
@@ -84,7 +67,7 @@ export default {
   },
   watch: {
     page(newPage) {
-      this.$router.push({ path: this.$route.path, query: { page: newPage } });
+      this.$router.push({path: this.$route.path, query: {page: newPage}});
     },
   },
   computed: {
@@ -94,7 +77,7 @@ export default {
     cardsKeysArray() {
       return [
         ...Array(
-          this.animes.length > 0 ? this.animes.length : this.animePerPage
+            this.animes.length > 0 ? this.animes.length : this.animePerPage
         ).keys(),
       ];
     },

@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import useBreakpoints from "vue-next-breakpoints";
+import bp from "@/breakpoints"
 import PageInputTemplate from "@/components/PageInputTemplate";
 import { client } from "@/axios";
 import { useNotification } from "naive-ui";
@@ -66,16 +66,9 @@ export default {
   components: {
     PageInputTemplate,
   },
-  setup() {
-    const bp = useBreakpoints({
-      xs: 550,
-      md: 1200,
-      lg: [1201],
-    });
-    return { bp };
-  },
   data() {
     return {
+      bp,
       showInputModal: false,
       disabled: false,
       user: this.$store.getters.user,

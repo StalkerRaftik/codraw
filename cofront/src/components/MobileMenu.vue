@@ -65,7 +65,7 @@ export default {
   methods: {
     routeTo(path) {
       this.show = false;
-      this.$router.push({ path });
+      this.$router.push(path);
     },
   },
 };

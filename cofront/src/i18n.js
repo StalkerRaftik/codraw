@@ -11,6 +11,10 @@ const RU = {
   is_staff: "Администратор",
   last_login: "В последний раз заходил",
 
+  AN: 'Анонсировано',
+  RE: 'Вышедшее',
+  ON: 'Сейчас выходит',
+
   // Registration TODO: Translate such errors on server
   "A user with that username already exists.":
     "Пользователь с таким именем уже существует.",

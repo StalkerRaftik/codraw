@@ -1,23 +1,24 @@
 <template>
   <n-card class="header" :bordered="false">
     <n-input
-      v-if="bp.lg.matches"
-      class="search"
-      type="search"
-      size="large"
-      placeholder="Поиск аниме"
+        v-if="bp.md.matches"
+        class="search"
+        type="search"
+        size="large"
+        :style="bp.lg.matches ? {width: '30vw',  left: 'calc(50% - 15vw)'}  : {width: '24vw',  left: 'calc(50% - 12vw)' }"
+        placeholder="Поиск аниме"
     />
     <n-modal v-model:show="showSearchModal">
       <n-card class="modal-search">
-        <n-input type="search" size="large" placeholder="Поиск аниме" />
+        <n-input type="search" :size="large" placeholder="Поиск аниме"/>
       </n-card>
     </n-modal>
 
     <MobileMenu
-      v-if="bp.xs.matches"
-      :paths="paths"
-      @showSearch="showSearch"
-      @switchTheme="switchTheme"
+        v-if="!bp.md.matches"
+        :paths="paths"
+        @showSearch="showSearch"
+        @switchTheme="switchTheme"
     />
     <n-space v-else justify="space-between" align="center">
       <n-space align="center">
@@ -28,39 +29,30 @@
             </n-button>
           </router-link>
         </div>
-        <Icon v-if="bp.md.matches" @click="showSearch" size="24">
-          <SearchIcon />
+        <Icon v-if="!bp.md.matches" @click="showSearch" size="24">
+          <SearchIcon/>
         </Icon>
       </n-space>
       <n-space justify="end" align="center">
         <Icon @click="switchTheme" size="24" style="margin-right: 8px">
-          <ChangeThemeIcon />
+          <ChangeThemeIcon/>
         </Icon>
-        <HeaderAuth style="margin-right: 8px" />
+        <HeaderAuth style="margin-right: 8px"/>
       </n-space>
     </n-space>
   </n-card>
 </template>
 
 <script>
-import { Search32Filled as SearchIcon } from "@vicons/fluent";
-import { DarkTheme24Regular as ChangeThemeIcon } from "@vicons/fluent";
+import {Search32Filled as SearchIcon} from "@vicons/fluent";
+import {DarkTheme24Regular as ChangeThemeIcon} from "@vicons/fluent";
 import HeaderAuth from "@/components/HeaderAuth";
-
-import useBreakpoints from "vue-next-breakpoints";
+import bp from "@/breakpoints"
 import MobileMenu from "@/components/MobileMenu";
 import Icon from "@/components/Icon";
 
 export default {
   name: "Header",
-  setup() {
-    const bp = useBreakpoints({
-      xs: 550,
-      md: 1200,
-      lg: [1201],
-    });
-    return { bp };
-  },
   components: {
     SearchIcon,
     ChangeThemeIcon,
@@ -70,6 +62,7 @@ export default {
   },
   data() {
     return {
+      bp,
       showSearchModal: false,
       logged: false,
       paths: [
@@ -83,7 +76,7 @@ export default {
           key: "anime_list",
           label: "Аниме",
           selected: false,
-          to: { name: "AnimeList", query: { page: 1 } },
+          to: {name: "AnimeList", query: {page: 1}},
         },
         {
           key: "forum",
@@ -123,8 +116,6 @@ export default {
 
 .search {
   position: absolute;
-  left: calc(50% - 15vw);
-  width: 30vw;
 }
 
 .modal-search {

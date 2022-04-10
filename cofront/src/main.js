@@ -8,7 +8,7 @@ import prepopulateStore from "@/store/prepopulate";
 import "./assets/main.css";
 import "vfonts/Lato.css";
 
-const app = createApp(App);
+const app = createApp(App, {});
 app.use(router);
 app.use(naive);
 app.use(store);

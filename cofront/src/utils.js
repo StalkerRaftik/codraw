@@ -38,3 +38,7 @@ export function changeQuerySilently(route, query) {
   }
   history.pushState({}, "", route.path + `?${queryList.join("&")}`);
 }
+
+export function prettyNumber(num, sep=".") {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+}

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import useBreakpoints from "vue-next-breakpoints";
+import bp from "@/breakpoints"
 
 export default {
   name: "RegistrationTemplate",
@@ -48,16 +48,9 @@ export default {
     title: { type: String, default: "" },
     buttonTitle: { type: String, default: "" },
   },
-  setup() {
-    const bp = useBreakpoints({
-      xs: 550,
-      md: 1200,
-      lg: [1201],
-    });
-    return { bp };
-  },
   data() {
     return {
+      bp,
       mutableFormData: JSON.parse(JSON.stringify(this.formData)),
     };
   },
