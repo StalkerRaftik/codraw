@@ -32,6 +32,7 @@ class Anime(models.Model):
     added_episodes = models.IntegerField(default=0)
     image = models.ImageField('media/anime/images')
     genres = models.ManyToManyField(Genre, related_name='anime')
+    rating_calc = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=0)
 
     # temporary rating from dataset. Will be overwritten after ?? reviews
     raw_rating = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(10)], blank=True)
@@ -45,7 +46,7 @@ class Anime(models.Model):
 class Rating(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
-    value = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
+    value = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)])
 
     class Meta:
         constraints = [UniqueConstraint(fields=['owner', 'anime'], name='unique_anime_user')]

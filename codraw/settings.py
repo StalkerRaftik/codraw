@@ -174,3 +174,13 @@ REST_FRAMEWORK = {
         'codraw.utils.filter_backends.BaseOrderingFilterBackend',
     ],
 }
+
+# REDIS
+
+REDIS_HOST = config['REDIS']['HOST']
+REDIS_PORT = config['REDIS']['PORT']
+_REDIS_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_URL = _REDIS_URL
+CELERY_RESULT_BACKEND = _REDIS_URL
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+

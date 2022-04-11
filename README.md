@@ -22,6 +22,12 @@ Sweety pet project :3
 9. Run `sudo yarn global add @vue/cli`
 #### It's done!
 
+## Celery scheduler:
+1. Install docker with docker-compose: [docker installation](https://docs.docker.com/engine/install/ubuntu/)
+2. Start redis via `docker-compose up celery`
+3. Start beat via `celery -A codraw beat`
+4. Create workers via `celery -A codraw worker --loglevel=debug --concurrency=*YOUR WORKERS COUNT*`
+
 ## Commands:
 - Start backend in dev mode: `python manage.py runserver`
 - Start frontend in dev mode: `npm run server`
