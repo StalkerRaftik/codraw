@@ -24,7 +24,7 @@ Sweety pet project :3
 
 ## Celery scheduler:
 1. Install docker with docker-compose: [docker installation](https://docs.docker.com/engine/install/ubuntu/)
-2. Start redis via `docker-compose up celery`
+2. Start redis via `docker-compose up redis`
 3. Start beat via `celery -A codraw beat`
 4. Create workers via `celery -A codraw worker --loglevel=debug --concurrency=*YOUR WORKERS COUNT*`
 
