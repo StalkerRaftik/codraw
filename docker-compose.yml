@@ -1,33 +1,31 @@
 version: '3.7'
 
-services:
-  redis:
-    image: redis:7.0-rc3-alpine3.15
-    ports:
-      - 6379:6379
-  db:
-    image: postgres:13.0-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=qwerty
-      - POSTGRES_PASSWORD=qwerty
-      - POSTGRES_DB=qwerty
-  web:
-    build: .
-    command: python /usr/src/codraw/manage.py runserver 0.0.0.0:8010
-    volumes:
-      - .:/usr/src/codraw
-      - /etc/codraw:/etc/codraw
-    ports:
-      - 8010:8010
-    depends_on:
-      - db
 volumes:
-  postgres_data:
+    postgres_data: {}
 
+services:
+    redis:
+        image: redis:7.0-rc3-alpine3.15
+        ports:
+            - "${REDIS_PORT}:6379"
+    postgres:
+        image: postgres:13.0-alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        env_file: .env
+    backend:
+        build:
+            context: .
+        depends_on:
+            - postgres
+        volumes:
+            - .:/app
+        command: /start.sh
+        entrypoint: /entrypoint.sh
+        restart: always
+        env_file: .env
+        ports:
+            - "8000:8000"
 
 
 #  front:

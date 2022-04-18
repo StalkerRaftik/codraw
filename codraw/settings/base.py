@@ -1,42 +1,24 @@
 import os
-import logging
 from pathlib import Path
-import configparser
-from distutils.util import strtobool
-
-config = configparser.ConfigParser()
-config.read('/etc/codraw/settings.ini')
-
-PROJECT_APPS = [
-    'frontapi',
-]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# BEAUTIFUL HTTPS THINGS, THAT MUST BE USED IN FUTURE
-# SECURE_HSTS_SECONDS = ...
-# SECURE_SSL_REDIRECT = ...
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = ...
-# SESSION_COOKIE_SECURE = ...
 
 # Main settings
 
-SECRET_KEY = config['MAIN']['SecretKey']
-DEBUG = bool(strtobool(config['MAIN']['Debug']))
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'SECRETKEYNOTSET!')
 
 ALLOWED_HOSTS = ['*']
-
-# CORS policy
-
-CORS_ORIGIN_ALLOW_ALL = DEBUG
-# may I can use only http ?
-CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:8080', 'http://localhost:8080']
 
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
+
+PROJECT_APPS = [
+    'frontapi',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -59,7 +41,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware', CORS headers is enough?
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -90,21 +72,16 @@ WSGI_APPLICATION = 'codraw.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'sqlite': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'OPTIONS': {
-            'timeout': 20,
-        }
-    },
-    'postgres': {
-        **{option[0].upper(): option[1] for option in config['POSTGRES'].items()},
-        'ENGINE': 'django.db.backends.postgresql',
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv("POSTGRES_DB"),
+        'USER': os.getenv("POSTGRES_USER"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'HOST': os.getenv("POSTGRES_HOST"),
+        'PORT': os.getenv("POSTGRES_PORT"),
         'default-character-set': 'utf8',
     }
 }
-DEFAULT_DB = 'sqlite' if DEBUG else 'postgres'
-DATABASES['default'] = DATABASES.pop(DEFAULT_DB)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -131,9 +108,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -144,6 +121,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # STATICFILES_DIRS = [
 #     BASE_DIR / "some....",
 # ]
@@ -177,10 +155,11 @@ REST_FRAMEWORK = {
 
 # REDIS
 
-REDIS_HOST = config['REDIS']['HOST']
-REDIS_PORT = config['REDIS']['PORT']
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+REDIS_PORT = os.getenv('REDIS_PORT', '6379')
 _REDIS_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 BROKER_URL = _REDIS_URL
 CELERY_RESULT_BACKEND = _REDIS_URL
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+
 
