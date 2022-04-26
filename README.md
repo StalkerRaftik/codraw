@@ -11,31 +11,29 @@
 
 Sweety pet project :3
 ## Installation for dev: 
-1. Create virtual environment (`venv`) with Python `3.9.0` or greater;
-2. Activate venv using command `source path-to-venv-folder/bin/activate`;
-3. Go to root project folder;
-4. Run `./setup.sh` command with `sudo` rights;
-5. Run `pip install -U -r requirements.txt`
-6. Migrate using  `python manage.py migrate`
-7. Go to `cofront` folder;
-8. Run `yarn` command.
-9. Run `sudo yarn global add @vue/cli`
-#### It's done!
+1. Install docker with docker-compose: [docker installation](https://docs.docker.com/engine/install/ubuntu/)
+1. Go to project root folder;
+2. Start containers via `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up --build`;
+3. It's done!
+
+For future starts you should use `docker-compose up`
 
 ## Celery scheduler:
-1. Install docker with docker-compose: [docker installation](https://docs.docker.com/engine/install/ubuntu/)
 2. Start redis via `docker-compose up redis`
 3. Start beat via `celery -A codraw beat`
 4. Create workers via `celery -A codraw worker --loglevel=debug --concurrency=*YOUR WORKERS COUNT*`
 
-## Commands:
-- Start backend in dev mode: `python manage.py runserver`
-- Start frontend in dev mode: `npm run server`
-- Run tests: `tox`
 
-- Load anime data from csv file: `python manage.py loadcsv path/to/dataset.csv`
+## Useful Commands:
+- Run tests: `tox`
+- Load anime data from csv file: `python manage.py loadcsv path/to/dataset.csv` (only in container)
 
 Supported dataset: [Dataset](https://www.kaggle.com/marlesson/myanimelist-dataset-animes-profiles-reviews/code).
 
-## Additional information
-* OpenAPI schema: `localhost:8010/api/endpoint`
+### How to execute commands in container:
+1. Start container
+2. Run `docker ps`
+3. Run `docker exec -it *CONTAINER NAME* /bin/bash`
+
+### Additional information
+* OpenAPI schema: `localhost:8000/api/endpoint`

@@ -6,6 +6,7 @@ volumes:
 services:
     redis:
         image: redis:7.0-rc3-alpine3.15
+        profiles: ["celery"]
         ports:
             - "${REDIS_PORT}:6379"
     postgres:
@@ -26,14 +27,13 @@ services:
         env_file: .env
         ports:
             - "8000:8000"
-
-
-#  front:
-#    build: ./cofront
-#    command: python /usr/src/codraw/manage.py runserver 0.0.0.0:8010
-#    volumes:
-#      - .:/usr/src/codraw
-#    ports:
-#      - 8010:8010
-#    depends_on:
-#      - db
+    front:
+        build:
+            context: ./cofront
+        depends_on:
+            - backend
+        volumes:
+            - ./cofront:/app/cofront
+        command: yarn serve
+        ports:
+            - "8080:8080"
