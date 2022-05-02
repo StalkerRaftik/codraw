@@ -6,7 +6,6 @@ volumes:
 services:
     redis:
         image: redis:7.0-rc3-alpine3.15
-        profiles: ["celery"]
         ports:
             - "${REDIS_PORT}:6379"
     postgres:
@@ -16,11 +15,11 @@ services:
         env_file: .env
     backend:
         build:
-            context: .
+            context: ../backend
         depends_on:
             - postgres
         volumes:
-            - .:/app
+            - ../backend:/backend
         command: /start.sh
         entrypoint: /entrypoint.sh
         restart: always
@@ -29,11 +28,12 @@ services:
             - "8000:8000"
     front:
         build:
-            context: ./cofront
+            context: ../frontend
         depends_on:
             - backend
         volumes:
-            - ./cofront:/app/cofront
+            - ../frontend:/frontend
         command: yarn serve
+        env_file: .env
         ports:
             - "8080:8080"

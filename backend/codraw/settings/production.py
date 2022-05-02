@@ -13,7 +13,7 @@ DEBUG = False
 
 
 # CORS policy
-CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:8080', 'http://localhost:8080']
+CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:80']
 
 
 # ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(' ')

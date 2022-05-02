@@ -1,3 +1,2 @@
 /.idea/
-/db.sqlite3
-/centrifugo/
+/backend/db.sqlite3

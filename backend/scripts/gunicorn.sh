@@ -6,4 +6,4 @@ set -o nounset
 
 python manage.py migrate
 python manage.py collectstatic --noinput --verbosity 0
-gunicorn project.wsgi -b 0.0.0.0:8000 --chdir=/app
+gunicorn codraw.wsgi -b 0.0.0.0:8000 --chdir=/backend

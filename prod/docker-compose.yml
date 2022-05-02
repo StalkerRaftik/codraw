@@ -1,0 +1,54 @@
+version: '3.7'
+
+volumes:
+    postgres_data: {}
+    backend_static:
+    frontend_static:
+
+services:
+    nginx:
+        build:
+            context: ./nginx
+        restart: unless-stopped
+        volumes:
+            - backend_static:/backend/static
+            - frontend_static:/frontend/dist
+        ports:
+            - "80:80"
+            - "443:443"
+        depends_on:
+            - backend
+    redis:
+        image: redis:7.0-rc3-alpine3.15
+        expose:
+            - "${REDIS_PORT}"
+    postgres:
+        image: postgres:13.0-alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        env_file: .env
+    backend:
+        build:
+            context: ../backend
+            dockerfile: ../backend/Dockerfile.prod
+        depends_on:
+            - postgres
+        volumes:
+            - backend_static:/backend/static
+        command: /gunicorn.sh
+        entrypoint: /entrypoint.sh
+        restart: always
+        env_file: .env
+        expose:
+            - "8000"
+    front:
+        build:
+            context: ../frontend
+            dockerfile: ../frontend/Dockerfile.prod
+        depends_on:
+            - backend
+        volumes:
+            - frontend_static:/frontend/dist
+        env_file: .env
+        expose:
+            - "8080"
