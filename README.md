@@ -16,21 +16,21 @@ Sweety pet project :3
 2. Start containers via `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up --build`;
 3. It's done!
 
-For future starts you should use `docker-compose up`
+For future use you should run `docker-compose up`
 
 ## Celery scheduler:
 2. Start redis via `docker-compose up redis`
-3. Start beat via `celery -A codraw beat`
-4. Create workers via `celery -A codraw worker --loglevel=debug --concurrency=*YOUR WORKERS COUNT*`
+3. Start beat via `celery -A codraw beat` (only in project container)
+4. Create workers via `celery -A codraw worker --loglevel=debug --concurrency=*YOUR WORKERS COUNT*`(only in project container)
 
 
 ## Useful Commands:
 - Run tests: `tox`
-- Load anime data from csv file: `python manage.py loadcsv path/to/dataset.csv` (only in container)
+- Load anime data from csv file: `python manage.py loadcsv path/to/dataset.csv` (only in project container)
 
 Supported dataset: [Dataset](https://www.kaggle.com/marlesson/myanimelist-dataset-animes-profiles-reviews/code).
 
-### How to execute commands in container:
+### How to execute commands in project container:
 1. Start container
 2. Run `docker ps`
 3. Run `docker exec -it *CONTAINER NAME* /bin/bash`
