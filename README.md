@@ -16,7 +16,7 @@ Sweety pet project :3
 2. Start containers via `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up --build`;
 3. It's done!
 
-For future use you should run `docker-compose up`
+Then use `docker-compose up` for future usage.
 
 ## Celery scheduler:
 2. Start redis via `docker-compose up redis`
