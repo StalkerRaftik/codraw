@@ -2,8 +2,9 @@ version: '3.7'
 
 volumes:
     postgres_data: {}
-    backend_static:
     frontend_static:
+    backend_static:
+    backend_media:
 
 services:
     nginx:
@@ -11,8 +12,9 @@ services:
             context: ./nginx
         restart: unless-stopped
         volumes:
-            - backend_static:/backend/static
-            - frontend_static:/frontend/dist
+            - frontend_static:/dist/frontend/static
+            - backend_static:/dist/backend/static
+            - backend_media:/dist/backend/media
         ports:
             - "80:80"
             - "443:443"
@@ -35,6 +37,7 @@ services:
             - postgres
         volumes:
             - backend_static:/backend/static
+            - backend_media:/backend/media
         command: /gunicorn.sh
         entrypoint: /entrypoint.sh
         restart: always
