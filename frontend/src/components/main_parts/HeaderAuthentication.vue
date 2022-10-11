@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="bp.md.matches">
+    <div v-if="$bp.md.matches">
       <n-dropdown v-if="user" :options="options">
         <n-button text type="primary" size="large">{{
           user.username
@@ -48,7 +48,6 @@ import {
   PersonCircleOutline as UserIcon,
   LogOutOutline as LogoutIcon,
 } from "@vicons/ionicons5";
-import bp from "@/breakpoints"
 
 // TODO: Profile deletion
 
@@ -69,7 +68,6 @@ export default {
   name: "HeaderAuth",
   data() {
     return {
-      bp,
       optionsLogged: [
         {
           label: "Профиль",

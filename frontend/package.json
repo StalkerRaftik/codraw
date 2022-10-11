@@ -1,20 +1,16 @@
 {
   "name": "codraw",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "set NODE_ENV=development && set CHOKIDAR_USEPOLLING=true && vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@vicons/antd": "^0.12.0",
-    "@vicons/carbon": "^0.12.0",
-    "@vicons/fa": "^0.12.0",
     "@vicons/fluent": "^0.12.0",
     "@vicons/ionicons4": "^0.12.0",
     "@vicons/ionicons5": "^0.12.0",
-    "@vicons/material": "^0.12.0",
     "@vicons/tabler": "^0.12.0",
     "@vue/cli-plugin-router": "^5.0.1",
     "axios": "^0.26.0",
@@ -22,9 +18,12 @@
     "naive-ui": "^2.26.0",
     "vfonts": "^0.0.3",
     "vue": "^3.2.13",
+    "vue-loader": "^17.0.0",
     "vue-next-breakpoints": "^1.0.1",
     "vue-router": "4",
-    "vuex": "^4.0.2"
+    "vue-template-compiler": "^2.7.8",
+    "vuex": "^4.0.2",
+    "webpack": "^5.74.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -33,7 +32,8 @@
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "webpack-cli": "^4.10.0"
   },
   "eslintConfig": {
     "root": true,

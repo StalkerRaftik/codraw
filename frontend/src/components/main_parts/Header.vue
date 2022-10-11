@@ -1,11 +1,11 @@
 <template>
   <n-card class="header" :bordered="false">
     <n-input
-        v-if="bp.md.matches"
+        v-if="$bp.md.matches"
         class="search"
         type="search"
         size="large"
-        :style="bp.lg.matches ? {width: '30vw',  left: 'calc(50% - 15vw)'}  : {width: '24vw',  left: 'calc(50% - 12vw)' }"
+        :style="$bp.lg.matches ? {width: '30vw',  left: 'calc(50% - 15vw)'}  : {width: '24vw',  left: 'calc(50% - 12vw)' }"
         placeholder="Поиск аниме"
     />
     <n-modal v-model:show="showSearchModal">
@@ -15,7 +15,7 @@
     </n-modal>
 
     <MobileMenu
-        v-if="!bp.md.matches"
+        v-if="!$bp.md.matches"
         :paths="paths"
         @showSearch="showSearch"
         @switchTheme="switchTheme"
@@ -29,7 +29,7 @@
             </n-button>
           </router-link>
         </div>
-        <Icon v-if="!bp.md.matches" @click="showSearch" size="24">
+        <Icon v-if="!$bp.md.matches" @click="showSearch" size="24">
           <SearchIcon/>
         </Icon>
       </n-space>
@@ -46,9 +46,8 @@
 <script>
 import {Search32Filled as SearchIcon} from "@vicons/fluent";
 import {DarkTheme24Regular as ChangeThemeIcon} from "@vicons/fluent";
-import HeaderAuth from "@/components/HeaderAuth";
-import bp from "@/breakpoints"
-import MobileMenu from "@/components/MobileMenu";
+import HeaderAuth from "@/components/main_parts/HeaderAuthentication";
+import MobileMenu from "@/components/main_parts/MobileHeader";
 import Icon from "@/components/Icon";
 
 export default {
@@ -62,7 +61,6 @@ export default {
   },
   data() {
     return {
-      bp,
       showSearchModal: false,
       logged: false,
       paths: [
@@ -78,12 +76,12 @@ export default {
           selected: false,
           to: {name: "AnimeList", query: {page: 1}},
         },
-        {
-          key: "forum",
-          label: "Форум",
-          selected: false,
-          to: "/",
-        },
+        // {
+        //   key: "forum",
+        //   label: "Форум",
+        //   selected: false,
+        //   to: "/",
+        // },
       ],
     };
   },

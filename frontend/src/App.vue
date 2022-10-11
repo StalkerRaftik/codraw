@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import Header from "@/components/parts/Header";
-import Footer from "@/components/parts/Footer";
+import Header from "@/components/main_parts/Header";
+import Footer from "@/components/main_parts/Footer";
 import { ruRU, dateRuRU } from "naive-ui";
 
 export default {

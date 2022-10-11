@@ -7,7 +7,7 @@
     <n-card
       title="Профиль"
       size="huge"
-      :style="{ width: bp.lg.matches ? '600px' : 'auto' }"
+      :style="{ width: $bp.lg.matches ? '600px' : 'auto' }"
     >
       <n-list>
         <n-list-item v-for="(mas, key) in profileData" :key="key">
@@ -49,11 +49,9 @@
 </template>
 
 <script>
-import bp from "@/breakpoints"
 import PageInputTemplate from "@/components/PageInputTemplate";
 import { client } from "@/axios";
 import { useNotification } from "naive-ui";
-import $t from "@/i18n";
 import { parseResponseException } from "@/utils";
 
 const buttonTextEnum = {
@@ -68,7 +66,6 @@ export default {
   },
   data() {
     return {
-      bp,
       showInputModal: false,
       disabled: false,
       user: this.$store.getters.user,
@@ -109,7 +106,6 @@ export default {
     },
   },
   methods: {
-    $t,
     async changeData(patchData) {
       if (this.buttonText === this.buttonEnum.INITIAL) {
         this.buttonText = this.buttonEnum.SUBMIT;

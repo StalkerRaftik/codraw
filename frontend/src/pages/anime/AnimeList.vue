@@ -1,7 +1,7 @@
 <template>
   <n-space vertical>
     <n-space
-        :style="bp.xs.matches ? { width: '80vw' } : { width: '95vw' }"
+        :style="$bp.xs.matches ? { width: '80vw' } : { width: '95vw' }"
         style="margin-top: 16px; margin-bottom: 16px"
         justify="space-around"
     >
@@ -16,7 +16,7 @@
       <n-pagination
           v-model:page="page"
           :page-count="Math.ceil(animeCount / animePerPage)"
-          :page-slot="this.bp.xs.matches ? 9 : 5"
+          :page-slot="this.$bp.xs.matches ? 9 : 5"
       />
     </n-space>
   </n-space>
@@ -25,8 +25,7 @@
 <script>
 import {client} from "@/axios";
 import {showError} from "@/utils";
-import AnimeListCard from "@/components/AnimeListCard";
-import bp from "@/breakpoints"
+import AnimeListCard from "@/components/anime/list/AnimeListCard";
 import {useNotification} from "naive-ui";
 
 export default {
@@ -36,7 +35,6 @@ export default {
   },
   data() {
     return {
-      bp,
       n: useNotification(),
       page: parseInt(this.$route.query.page) || 1,
       animes: [],
@@ -46,7 +44,7 @@ export default {
   },
   async mounted() {
     try {
-      const responses = [this.getAnimePromise()];
+      const responses = [this.fetchAnimeList()];
       if (!this.genres) responses.push(this.$store.dispatch('fetchGenres'));
       const animeResponse = (await Promise.all(responses))[0];
       this.animes = animeResponse.data.results;
@@ -60,7 +58,7 @@ export default {
     this.page = parseInt(this.$route.query.page);
     window.scrollTo(0, 0);
     try {
-      this.animes = (await this.getAnimePromise()).data.results;
+      this.animes = (await this.fetchAnimeList()).data.results;
     } catch (e) {
       showError(this.n, "Данные не были получены!", e);
     }
@@ -83,7 +81,7 @@ export default {
     },
   },
   methods: {
-    getAnimePromise() {
+    fetchAnimeList() {
       return client.get("/anime/", {
         params: this.$route.query,
       });

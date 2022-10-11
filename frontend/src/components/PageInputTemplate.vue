@@ -3,7 +3,7 @@
     <n-card
       :title="this.title"
       size="huge"
-      :style="{ width: bp.lg.matches ? '600px' : 'auto' }"
+      :style="{ width: $bp.lg.matches ? '600px' : 'auto' }"
     >
       <n-form ref="formRef" :rules="rules" :model="mutableFormData" :disabled="disabled">
         <n-form-item
@@ -23,7 +23,7 @@
           <n-form-item>
             <n-button
               @click.prevent="validate"
-              :style="{ width: bp.lg.matches ? '200px' : 'auto' }"
+              :style="{ width: $bp.lg.matches ? '200px' : 'auto' }"
               :disabled="disabled"
             >
               {{ buttonTitle }}
@@ -36,8 +36,6 @@
 </template>
 
 <script>
-import bp from "@/breakpoints"
-
 export default {
   name: "RegistrationTemplate",
   props: {
@@ -50,7 +48,6 @@ export default {
   },
   data() {
     return {
-      bp,
       mutableFormData: JSON.parse(JSON.stringify(this.formData)),
     };
   },

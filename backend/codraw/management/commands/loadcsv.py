@@ -9,7 +9,7 @@ from django.core.files.base import File
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from codraw.models.anime import Anime, AnimeStatus, Genre
+from codraw.models.anime import Anime, Genre
 
 # .csv header:
 # ['uid', 'title', 'synopsis', 'genre', 'aired', 'episodes',
@@ -57,7 +57,7 @@ def load_anime(row):
     anime_data = {
         'original_name': row[1],
         'premiere_date': get_date(row[4]),
-        'status': AnimeStatus.RELEASED,
+        'status': Anime.AnimeStatus.RELEASED,
         'added_episodes': episodes_count,
         'episodes_count': episodes_count,
         'description': row[2],

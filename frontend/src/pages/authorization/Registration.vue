@@ -15,7 +15,6 @@
 <script>
 import PageInputTemplate from "@/components/PageInputTemplate";
 import { client } from "@/axios";
-import $t from "@/i18n";
 import { parseResponseException } from "@/utils";
 import { useNotification } from "naive-ui";
 
@@ -93,7 +92,6 @@ export default {
     };
   },
   methods: {
-    $t,
     async register(data) {
       this.disabled = true;
       const postData = { ...data };

@@ -1,6 +1,6 @@
 <template>
   <n-space justify="center" align="center" style="margin: 24px 0 24px 0;" vertical>
-    <n-card :style="bp.md.matches ? { width: '50vw'} : { width: '95vw' }" style="min-width: 300px;" size="small">
+    <n-card :style="$bp.md.matches ? { width: '50vw'} : { width: '95vw' }" style="min-width: 300px;" size="small">
       <n-space v-if="!anime" style="height: 500px;" vertical>
         <n-skeleton text :repeat="2"/>
         <div style="display: flex">
@@ -14,63 +14,9 @@
         <n-h1 style="margin: 0">
           <n-text type="primary">{{ anime.name }}</n-text>
         </n-h1>
-        <n-space :vertical="!bp.sm.matches" :wrap="false" :size="[8, bp.md.matches ? 0 : 8]">
+        <n-space :vertical="!$bp.sm.matches" :wrap="false" :size="[8, $bp.md.matches ? 0 : 8]">
           <img :src="anime.image" class="image" alt=""/>
-          <n-space class="properties" vertical :size="[0, 0]">
-            <AnimeDetailProperty property-name="Год выпуска">
-              <n-space :size="[0,0]">
-                <n-text>
-                  {{ anime.premiere_date[0] }}.
-                </n-text>
-                <n-text>
-                  {{ anime.premiere_date[1] }}.
-                </n-text>
-                <router-link
-                    :to="{ name: 'AnimeList', query: { year: anime.premiere_date[2] }}"
-                >
-                  <n-button text tag="a" type="info">
-                    {{ anime.premiere_date[2] }}
-                  </n-button>
-                </router-link>
-              </n-space>
-            </AnimeDetailProperty>
-            <AnimeDetailProperty class="property-margin" property-name="Жанры">
-              <div v-for="(genreId, arrKey) in anime.genres" :key="genreId" style="display: flex;">
-                <router-link
-                    :to="{ name: 'AnimeList', query: { genre: genreId }}"
-                >
-                  <n-button text tag="a" type="info">
-                    {{ genres[genreId] }}
-                  </n-button>
-                </router-link>
-                <span style="margin-right: 4px">
-                    {{ arrKey !== anime.genres.length - 1 ? ',' : '' }}
-                  </span>
-              </div>
-            </AnimeDetailProperty>
-            <AnimeDetailProperty class="property-margin" property-name="Статус">
-              <router-link
-                  :to="{ name: 'AnimeList', query: { status: anime.status }}"
-              >
-                <n-button text tag="a" type="info">
-                  {{ $t(anime.status) }}
-                </n-button>
-              </router-link>
-            </AnimeDetailProperty>
-            <AnimeDetailProperty class="property-margin" property-name="Серии">
-              <n-text>
-                1-{{ anime.added_episodes }} из {{ anime.episodes_count }} эп.
-              </n-text>
-            </AnimeDetailProperty>
-            <AnimeDetailProperty style="margin-top: 16px;" property-name="Рейтинг">
-              <n-rate size="large" readonly allow-half style="margin-left: 8px;" :default-value="anime.raw_rating"/>
-            </AnimeDetailProperty>
-            <AnimeDetailProperty property-name="Просмотров">
-              <n-text>
-                {{ prettyNumber(anime.raw_visits, ' ') }}
-              </n-text>
-            </AnimeDetailProperty>
-          </n-space>
+          <AnimeProperties :anime="anime" />
         </n-space>
         <n-space style="margin-top: 4px;" vertical>
           <n-text class="span-header">
@@ -88,7 +34,7 @@
         <n-skeleton width="100%" height="400px"/>
         <n-space style="margin-top: 16px;" :size="[0,0]" vertical>
           <n-text class="span-header">Понравилось аниме? Поставьте оценку!</n-text>
-          <n-rate size="large" allow-half :default-value="0"/>
+          <n-rate size="large" allow-half v-model:value="userRating" :on-update:value="setUserRate" />
         </n-space>
       </n-space>
     </n-card>
@@ -96,33 +42,33 @@
 </template>
 
 <script>
-import bp from "@/breakpoints";
 import {client} from "@/axios";
-import {showError, prettyNumber} from "@/utils";
+import {showError} from "@/utils";
 import {useNotification} from "naive-ui";
-import AnimeDetailProperty from '@/components/AnimeDetailProperty'
-import $t from '@/i18n'
+import AnimeProperties from '@/components/anime/detail/AnimeProperties';
 
 export default {
   name: "AnimeDetail",
   components: {
-    AnimeDetailProperty,
+    AnimeProperties,
   },
   async mounted() {
     try {
-      const responses = [this.getAnimePromise()];
-      if (!this.genres) responses.push(this.$store.dispatch('fetchGenres'));
-      const animeResponse = (await Promise.all(responses))[0];
-      this.animeResponseData = animeResponse.data;
+      const responses = await Promise.all([
+        this.fetchAnimeData(),
+        this.$store.dispatch('fetchGenres')
+      ]);
+      this.animeResponseData = responses[0].data;
     } catch (e) {
       showError(this.n, "Данные не были получены!", e);
     }
   },
   data() {
     return {
-      bp,
       n: useNotification(),
       animeResponseData: null,
+      userRating: 0,
+      userRatingId: false,
     }
   },
   computed: {
@@ -142,9 +88,29 @@ export default {
     }
   },
   methods: {
-    $t,
-    prettyNumber,
-    getAnimePromise() {
+    async userRateChanged(value) {
+      let oldValue = this.userRating;
+      try {
+        this.userRating = value;
+
+      } catch (e) {
+        this.userRating = oldValue;
+        showError(this.n, "Ошибка во время публикации рейтинга", e);
+      }
+    },
+    async updateUserRate(value) {
+      await client.post('/rating/', {
+        value: value,
+        anime: this.anime.id,
+      });
+    },
+    async createUserRate(value) {
+      return await client.post('/rating/', {
+        value: value,
+        anime: this.anime.id,
+      });
+    },
+    fetchAnimeData() {
       const route = this.$route
       return client.get(`/anime/${route.params.id}`, {
         params: route.query,
@@ -165,10 +131,6 @@ export default {
 
 .properties span, a {
   font-size: 16px;
-}
-
-.property-margin {
-  margin-top: 2px !important;
 }
 
 .span-header {

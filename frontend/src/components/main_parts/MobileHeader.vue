@@ -40,7 +40,7 @@ import Menu2 from "@vicons/tabler/Menu2";
 import Search32Filled from "@vicons/fluent/Search32Filled";
 import DarkTheme24Regular from "@vicons/fluent/DarkTheme24Regular";
 import Icon from "@/components/Icon";
-import HeaderAuth from "@/components/HeaderAuth";
+import HeaderAuth from "@/components/main_parts/HeaderAuthentication";
 
 export default {
   name: "MobileMenu",

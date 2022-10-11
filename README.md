@@ -9,14 +9,16 @@
   
 </details>
 
-Sweety pet project :3
-## Installation for dev: 
-1. Install docker with docker-compose: [docker installation](https://docs.docker.com/engine/install/ubuntu/)
-1. Go to project root folder;
-2. Start containers via `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up --build`;
+## Requirements:
+1. Docker/docker-compose/buildkit:  [linux](https://docs.docker.com/engine/install/ubuntu/) or [windows](https://www.docker.com/products/docker-desktop/)
+
+## Start dev server: 
+1. Go to `codraw/dev` folder;
+2. Up containers:
+    1. Linux: `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up --build`
+    2. Windows: `docker-compose up`
 3. It's done!
 
-Then use `docker-compose up` for future usage.
 
 ## Celery scheduler:
 2. Start redis via `docker-compose up redis`
@@ -26,7 +28,7 @@ Then use `docker-compose up` for future usage.
 
 ## Useful Commands:
 - Run tests: `tox`
-- Load anime data from csv file: `python manage.py loadcsv path/to/dataset.csv` (only in project container)
+- Load anime data from csv file: `python manage.py loadcsv path/to/dataset.csv *threads number*` (only in project container)
 
 Supported dataset: [Dataset](https://www.kaggle.com/marlesson/myanimelist-dataset-animes-profiles-reviews/code).
 

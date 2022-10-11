@@ -19,8 +19,7 @@ export default {
         async fetchGenres({state, commit}) {
             if (state.genres) return;
 
-            const genreResponse = await client.get("/genre/");
-            commit('saveGenres', genreResponse)
+            commit('saveGenres', await client.get("/genre/"))
         },
     },
 };

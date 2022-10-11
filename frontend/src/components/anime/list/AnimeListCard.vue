@@ -50,7 +50,6 @@
 </template>
 
 <script>
-import bp from "@/breakpoints"
 import {MdStar as RatingIcon} from "@vicons/ionicons4";
 import {Eye16Filled as VisitsIcon} from "@vicons/fluent";
 import Icon from "@/components/Icon";
@@ -65,11 +64,6 @@ export default {
   props: {
     anime: {type: Object, default: undefined},
   },
-  data() {
-    return {
-      bp,
-    }
-  },
   computed: {
     name() {
       return this.anime.name || this.anime.original_name;
@@ -82,13 +76,13 @@ export default {
     },
     cardStyle() {
       const style = {width: "17vw"};
-      if (this.bp.md.matches) {
+      if (this.$bp.md.matches) {
         style.width = "20vw";
       }
-      if (this.bp.sm.matches) {
+      if (this.$bp.sm.matches) {
         style.width = "35vw";
       }
-      if (this.bp.xs.matches) {
+      if (this.$bp.xs.matches) {
         style.width = "90vw";
       }
       style.marginBottom = "8px";
