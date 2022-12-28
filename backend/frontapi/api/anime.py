@@ -51,13 +51,17 @@ class AnimeViewSet(DependSerializerViewMixin, metaclass=SetMethodsMetaClass):
             return Response('Only authenticated users can set rating', status=status.HTTP_403_FORBIDDEN)
 
         anime = self.get_object()
-        rating_instance = Rating.objects.filter(anime=anime, owner=user).first()
 
-        serializer = UpdateRatingSerializer(rating_instance, data=request.data)
+        serializer = UpdateRatingSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        rating_instance = serializer.save()
+        rating_instance, created = Rating.objects.update_or_create(
+            anime=anime,
+            owner=user,
+            defaults={'value': serializer.validated_data['value']}
+        )
+        status_code = status.HTTP_201_CREATED if created else status.HTTP_204_NO_CONTENT
 
         return Response(
             ReadCreateRatingSerializer(rating_instance).data,
-            status=status.HTTP_201_CREATED,
+            status=status_code,
         )

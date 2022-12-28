@@ -30,3 +30,4 @@ class RatingViewSet(DependSerializerViewMixin, metaclass=SetMethodsMetaClass):
     create_serializer_class = ReadCreateRatingSerializer
     write_serializer_class = UpdateRatingSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+

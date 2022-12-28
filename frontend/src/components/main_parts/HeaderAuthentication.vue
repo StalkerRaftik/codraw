@@ -86,7 +86,7 @@ export default {
           props: {
             onClick: () => {
               this.$store.dispatch("logout");
-              this.$router.push("/");
+              this.$router.go();
             },
           },
         },

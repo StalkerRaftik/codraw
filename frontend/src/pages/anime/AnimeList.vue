@@ -1,9 +1,8 @@
 <template>
   <n-space vertical>
     <n-space
-        :style="$bp.xs.matches ? { width: '80vw' } : { width: '95vw' }"
-        style="margin-top: 16px; margin-bottom: 16px"
-        justify="space-around"
+        style="margin-top: 16px; margin-bottom: 16px; gap: 16px; width: 95vw;"
+        justify="center"
     >
       <AnimeListCard
           v-for="(animeKey, iterKey) in cardsKeysArray"

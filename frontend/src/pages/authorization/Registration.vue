@@ -100,7 +100,7 @@ export default {
         const results = await client.post("/user/signup/", postData);
         this.$store.commit("setAuthToken", results.data.token);
         await this.$store.dispatch("fetchUserData");
-        await this.$router.push("/");
+        await this.$router.go(-1);
       } catch (e) {
         this.notification.error({
           title: "Регистрация завершилась неудачно!",

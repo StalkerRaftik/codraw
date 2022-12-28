@@ -10,7 +10,6 @@ services:
     nginx:
         build:
             context: ./nginx
-        restart: unless-stopped
         volumes:
             - frontend_static:/dist/frontend/static
             - backend_static:/dist/backend/static
@@ -40,7 +39,6 @@ services:
             - backend_media:/backend/media
         command: /gunicorn.sh
         entrypoint: /entrypoint.sh
-        restart: always
         env_file: .env
         expose:
             - "8000"

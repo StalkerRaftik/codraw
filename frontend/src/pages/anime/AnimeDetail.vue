@@ -1,6 +1,6 @@
 <template>
-  <n-space justify="center" align="center" style="margin: 24px 0 24px 0;" vertical>
-    <n-card :style="$bp.md.matches ? { width: '50vw'} : { width: '95vw' }" style="min-width: 300px;" size="small">
+  <n-space justify="center" align="center" style="padding: 24px 0;" vertical>
+    <n-card style="min-width: 300px; width: 95vw;" size="small">
       <n-space v-if="!anime" style="height: 500px;" vertical>
         <n-skeleton text :repeat="2"/>
         <div style="display: flex">
@@ -22,7 +22,7 @@
           <n-text class="span-header">
             Описание:
           </n-text>
-          <n-ellipsis expand-trigger="click" line-clamp="4" :tooltip="false">
+          <n-ellipsis expand-trigger="click" line-clamp="4" :tooltip="false" style="padding-right: 64px;">
             <n-text>
               {{ anime.description }}
             </n-text>
@@ -32,9 +32,13 @@
           <n-text>Смотреть {{ anime.name }} в хорошем качестве:</n-text>
         </n-h2>
         <n-skeleton width="100%" height="400px"/>
-        <n-space style="margin-top: 16px;" :size="[0,0]" vertical>
-          <n-text class="span-header">Понравилось аниме? Поставьте оценку!</n-text>
-          <n-rate size="large" allow-half v-model:value="userRating" :on-update:value="setUserRate" />
+        <n-space justify="center" style="margin: 24px 0;">
+          <n-space style="margin-top: 16px; gap: 8px;" :size="[0,0]" vertical align="center">
+            <n-text class="span-header">
+              {{userRating ? `Вы оценили это аниме. Ваша оценка - ${userRating}` : "Понравилось аниме? Поставьте оценку!"}}
+            </n-text>
+            <n-rate size="large" allow-half v-model:value="userRating" />
+          </n-space>
         </n-space>
       </n-space>
     </n-card>
@@ -59,6 +63,7 @@ export default {
         this.$store.dispatch('fetchGenres')
       ]);
       this.animeResponseData = responses[0].data;
+      this.userRating = this.animeResponseData.user_rating
     } catch (e) {
       showError(this.n, "Данные не были получены!", e);
     }
@@ -67,9 +72,23 @@ export default {
     return {
       n: useNotification(),
       animeResponseData: null,
-      userRating: 0,
-      userRatingId: false,
+      userRating: null,
     }
+  },
+  watch: {
+    async userRating(newValue, oldValue) {
+      if (!oldValue) return
+      try {
+        await this.updateUserRate(newValue)
+        this.n.success({
+          title: "Оценка обновлена",
+          duration: 3000,
+        });
+      }
+      catch (e) {
+        showError(this.n, 'Оценка не обновлена', e)
+      }
+    },
   },
   computed: {
     genres() {
@@ -88,29 +107,12 @@ export default {
     }
   },
   methods: {
-    async userRateChanged(value) {
-      let oldValue = this.userRating;
-      try {
-        this.userRating = value;
-
-      } catch (e) {
-        this.userRating = oldValue;
-        showError(this.n, "Ошибка во время публикации рейтинга", e);
-      }
-    },
     async updateUserRate(value) {
-      await client.post('/rating/', {
+      await client.post(`/anime/${this.$route.params.id}/set_user_rating/`, {
         value: value,
-        anime: this.anime.id,
       });
     },
-    async createUserRate(value) {
-      return await client.post('/rating/', {
-        value: value,
-        anime: this.anime.id,
-      });
-    },
-    fetchAnimeData() {
+    async fetchAnimeData() {
       const route = this.$route
       return client.get(`/anime/${route.params.id}`, {
         params: route.query,
